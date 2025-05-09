@@ -1,11 +1,12 @@
 {
   "name": "vs-assets-viewer",
   "displayName": "VS Assets Viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "VSCode extension to preview images and SVG files in a grid layout / 画像ファイルとSVGファイルをグリッド形式でプレビュー表示するVSCode拡張機能",
   "main": "./out/extension.js",
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
+    "vscode:package": "pnpm run compile && pnpm run package",
+    "vscode:publish": "vsce publish",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts",
@@ -25,6 +26,7 @@
   "author": "moga",
   "publisher": "moga",
   "license": "MIT",
+  "icon": "icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/mogaming217/vs-assets-viewer.git"
