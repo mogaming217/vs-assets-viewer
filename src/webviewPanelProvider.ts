@@ -244,8 +244,30 @@ function getWebviewContent(webview: vscode.Webview): string {
       font-size: 1.2em;
       font-weight: bold;
       margin: 0 0 15px 0;
-      padding-bottom: 5px;
+      padding: 8px 5px;
       border-bottom: 1px solid var(--vscode-panel-border);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    .directory-header:hover {
+      background-color: var(--vscode-list-hoverBackground);
+    }
+
+    .directory-header .toggle-icon {
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+
+    .directory-header .toggle-icon.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .assets-grid.collapsed {
+      display: none;
     }
 
     .assets-grid {
@@ -453,12 +475,29 @@ function getWebviewContent(webview: vscode.Webview): string {
           // ディレクトリヘッダーを作成
           const header = document.createElement('h2');
           header.className = 'directory-header';
-          header.textContent = directoryData.directoryName || 'その他';
+
+          // ヘッダーの内容を作成
+          const headerText = document.createElement('span');
+          headerText.textContent = directoryData.directoryName || 'その他';
+
+          // 折りたたみアイコンを作成
+          const toggleIcon = document.createElement('span');
+          toggleIcon.className = 'toggle-icon';
+          toggleIcon.textContent = '▼';
+
+          header.appendChild(headerText);
+          header.appendChild(toggleIcon);
           sectionContainer.appendChild(header);
 
           // グリッドを作成
           const grid = document.createElement('div');
           grid.className = 'assets-grid';
+
+          // ヘッダークリックで折りたたみ/展開
+          header.addEventListener('click', () => {
+            grid.classList.toggle('collapsed');
+            toggleIcon.classList.toggle('collapsed');
+          });
 
           // アセットをグリッドに追加
           directoryAssets.forEach(asset => {

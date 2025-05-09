@@ -2,6 +2,8 @@
 
 A VSCode extension that displays image and SVG files from a specified directory in a grid layout.
 
+![sample](./docs/1.png)
+
 ## Features
 
 - Preview image files (PNG, JPG, JPEG, GIF, BMP, WEBP) and SVG files
