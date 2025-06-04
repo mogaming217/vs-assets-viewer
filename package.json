@@ -1,7 +1,7 @@
 {
   "name": "vs-assets-viewer",
   "displayName": "VS Assets Viewer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "VSCode extension to preview images and SVG files in a grid layout / 画像ファイルとSVGファイルをグリッド形式でプレビュー表示するVSCode拡張機能",
   "main": "./out/extension.js",
   "scripts": {
