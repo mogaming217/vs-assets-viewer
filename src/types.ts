@@ -3,9 +3,9 @@
  */
 export interface AssetFile {
   /**
-   * アセットの一意のID
+   * アセットの一意のID（ファイルパス）
    */
-  id?: number;
+  id?: string;
 
   /**
    * ファイルの絶対パス

@@ -63,29 +63,20 @@ export async function showAssetsPreview(context: vscode.ExtensionContext): Promi
           // ファイルを開く
           if (message.data && typeof message.data === 'string') {
             try {
-              // IDからアセットを検索
-              const assetId = parseInt(message.data, 10);
-              // 最後に送信したアセットリストから該当するアセットを検索
-              const assets = await findAssetFiles();
-              if (assetId >= 0 && assetId < assets.length) {
-                const asset = assets[assetId];
-                const uri = vscode.Uri.file(asset.path);
+              // ファイルパスを直接使用
+              const filePath = message.data;
+              const uri = vscode.Uri.file(filePath);
 
-                // 画像ファイルやバイナリファイルの場合は vscode.open を使用
-                const extension = path.extname(asset.path).toLowerCase();
-                if (
-                  ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'].includes(extension)
-                ) {
-                  await vscode.commands.executeCommand('vscode.open', uri);
-                } else {
-                  // テキストファイルの場合は openTextDocument と showTextDocument を使用
-                  const document = await vscode.workspace.openTextDocument(uri);
-                  await vscode.window.showTextDocument(document);
-                }
+              // 画像ファイルやバイナリファイルの場合は vscode.open を使用
+              const extension = path.extname(filePath).toLowerCase();
+              if (
+                ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'].includes(extension)
+              ) {
+                await vscode.commands.executeCommand('vscode.open', uri);
               } else {
-                vscode.window.showErrorMessage(
-                  `指定されたアセットが見つかりませんでした (ID: ${assetId})`
-                );
+                // テキストファイルの場合は openTextDocument と showTextDocument を使用
+                const document = await vscode.workspace.openTextDocument(uri);
+                await vscode.window.showTextDocument(document);
               }
             } catch (error) {
               vscode.window.showErrorMessage(`ファイルを開けませんでした: ${error}`);
@@ -123,9 +114,9 @@ async function refreshAssets(panel: vscode.WebviewPanel): Promise<void> {
     const assets = await findAssetFiles();
 
     // ファイルパスをWebviewで安全に使用できるURIに変換
-    const webviewAssets = assets.map((asset, index) => ({
+    const webviewAssets = assets.map((asset) => ({
       ...asset,
-      id: index, // 一意のIDを追加
+      id: asset.path, // ファイルパスを一意のIDとして使用
       webviewUri: panel.webview.asWebviewUri(vscode.Uri.file(asset.path)).toString(),
     }));
 
@@ -506,7 +497,7 @@ function getWebviewContent(webview: vscode.Webview): string {
 
             // クリック時にファイルを開く
             item.addEventListener('click', () => {
-              openFile(asset.id.toString()); // 一意のIDを使用
+              openFile(asset.id); // ファイルパスを直接使用
             });
 
             const preview = document.createElement('div');
